@@ -114,21 +114,35 @@ handleTx(contract.depositRewardTRC(ethers.utils.parseUnits(v,18)));
 
 document.getElementById("depositUSDTBtn").onclick = () => {
 const v = document.getElementById("depositAmount").value;
-handleTx(contract.depositRewardUSDT(ethers.utils.parseUnits(v,18)));
+if(!v) return alert("Enter amount");
+
+handleTx(contract.depositRewardUSDT(
+ethers.utils.parseUnits(v,18)
+));
 };
 
+// ================= WITHDRAW TRC =================
 document.getElementById("withdrawRewardBtn").onclick = () => {
 const v = document.getElementById("withdrawRewardAmount").value;
-handleTx(contract.withdrawRewardPoolTRC(ethers.utils.parseUnits(v,18)));
+if(!v) return alert("Enter amount");
+
+handleTx(
+contract.withdrawRewardPoolTRC(
+ethers.utils.parseUnits(v,18)
+)
+);
 };
 
-document.getElementById("withdrawRewardBtn").onclick = async () => {
-    const amount = document.getElementById("withdrawRewardAmount").value;
-    if(!amount) return alert("Enter amount");
+// ================= WITHDRAW USDT =================
+document.getElementById("withdrawRewardUSDTBtn").onclick = () => {
+const v = document.getElementById("withdrawRewardAmount").value;
+if(!v) return alert("Enter amount");
 
-    const parsed = ethers.utils.parseUnits(amount, 18);
-
-    handleTx(contract.withdrawRewardPoolUSDT(parsed));
+handleTx(
+contract.withdrawRewardPoolUSDT(
+ethers.utils.parseUnits(v,18)
+)
+);
 };
 
 document.getElementById("withdrawTaxBtn").onclick = () => {
