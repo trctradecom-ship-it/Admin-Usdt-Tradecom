@@ -16,9 +16,9 @@ const abi = [
 
 "function depositRewardTRC(uint256)",
 "function depositRewardUSDT(uint256)",
-  
-"function withdrawRewardPoolTRC(uint256 amount)",
-"function withdrawRewardPoolUSDT(uint256 amount)",
+
+"function withdrawRewardPoolTRC(uint256)",
+"function withdrawRewardPoolUSDT(uint256)",
 "function withdrawTaxTRC()",
 "function withdrawTaxUSDT()",
 
@@ -68,17 +68,17 @@ const taxUSDT = await contract.taxPoolUSDT();
 const balance = await contract.contractTRCBalance();
 const price = await contract.getTRCPriceUSD();
 
-document.getElementById("rewardPool").innerHTML =
-`
-TRC: ${ethers.utils.formatUnits(rewardTRC,18)} <br>
-USDT: ${ethers.utils.formatUnits(rewardUSDT,18)}
-`;
+document.getElementById("rewardTRC").innerText =
+ethers.utils.formatUnits(rewardTRC,18);
 
-document.getElementById("taxPool").innerHTML =
-`
-TRC: ${ethers.utils.formatUnits(taxTRC,18)} <br>
-USDT: ${ethers.utils.formatUnits(taxUSDT,18)}
-`;
+document.getElementById("rewardUSDT").innerText =
+ethers.utils.formatUnits(rewardUSDT,6);
+
+document.getElementById("taxTRC").innerText =
+ethers.utils.formatUnits(taxTRC,18);
+
+document.getElementById("taxUSDT").innerText =
+ethers.utils.formatUnits(taxUSDT,6);
 
 document.getElementById("contractBalance").innerText =
 ethers.utils.formatUnits(balance,18);
@@ -92,12 +92,13 @@ updateChart(ethers.utils.formatUnits(balance,18));
 console.log(e);
 }
 }
+
 // TX HANDLER
-async function handleTx(tx){
+async function handleTx(txPromise){
 try{
 updateStatus("⏳ Processing...");
-const t = await tx;
-await t.wait();
+const tx = await txPromise;
+await tx.wait();
 updateStatus("✅ Success");
 await loadData();
 }catch(e){
@@ -106,14 +107,18 @@ updateStatus("❌ Failed");
 }
 }
 
-// REWARD
+// DEPOSIT
 document.getElementById("depositBtn").onclick = () => {
 const v = document.getElementById("depositAmount").value;
-handleTx(contract.depositRewardTRC(ethers.utils.parseUnits(v,18)));
+if(!v) return alert("Enter amount");
+
+handleTx(contract.depositRewardTRC(
+ethers.utils.parseUnits(v,18)
+));
 };
 
 document.getElementById("depositUSDTBtn").onclick = () => {
-const v = document.getElementById("depositAmount").value;
+const v = document.getElementById("depositUSDTAmount").value;
 if(!v) return alert("Enter amount");
 
 handleTx(contract.depositRewardUSDT(
@@ -121,30 +126,27 @@ ethers.utils.parseUnits(v,18)
 ));
 };
 
-// ================= WITHDRAW TRC =================
+// WITHDRAW TRC
 document.getElementById("withdrawRewardBtn").onclick = () => {
 const v = document.getElementById("withdrawRewardAmount").value;
 if(!v) return alert("Enter amount");
 
-handleTx(
-contract.withdrawRewardPoolTRC(
+handleTx(contract.withdrawRewardPoolTRC(
 ethers.utils.parseUnits(v,18)
-)
-);
+));
 };
 
-// ================= WITHDRAW USDT =================
+// WITHDRAW USDT
 document.getElementById("withdrawRewardUSDTBtn").onclick = () => {
 const v = document.getElementById("withdrawRewardAmount").value;
 if(!v) return alert("Enter amount");
 
-handleTx(
-contract.withdrawRewardPoolUSDT(
+handleTx(contract.withdrawRewardPoolUSDT(
 ethers.utils.parseUnits(v,18)
-)
-);
+));
 };
 
+// TAX
 document.getElementById("withdrawTaxBtn").onclick = () => {
 handleTx(contract.withdrawTaxTRC());
 };
@@ -154,12 +156,17 @@ handleTx(contract.withdrawTaxUSDT());
 };
 
 // PRICE
-document.getElementById("setIcoBtn").onclick = () => handleTx(contract.setPriceSourceToICO());
-document.getElementById("setEmaBtn").onclick = () => handleTx(contract.setPriceSourceToEMA());
+document.getElementById("setIcoBtn").onclick = () =>
+handleTx(contract.setPriceSourceToICO());
+
+document.getElementById("setEmaBtn").onclick = () =>
+handleTx(contract.setPriceSourceToEMA());
 
 document.getElementById("setManualBtn").onclick = () => {
 const v = document.getElementById("manualPrice").value;
-handleTx(contract.setPriceSourceToManual(ethers.utils.parseUnits(v,18)));
+handleTx(contract.setPriceSourceToManual(
+ethers.utils.parseUnits(v,18)
+));
 };
 
 document.getElementById("setDexBtn").onclick = () => {
@@ -167,8 +174,12 @@ const v = document.getElementById("dexAddress").value;
 handleTx(contract.setPriceSourceToDex(v));
 };
 
-document.getElementById("initEmaBtn").onclick = () => handleTx(contract.initializeEMA());
-document.getElementById("updateEmaBtn").onclick = () => handleTx(contract.updateEMA());
+// EMA
+document.getElementById("initEmaBtn").onclick = () =>
+handleTx(contract.initializeEMA());
+
+document.getElementById("updateEmaBtn").onclick = () =>
+handleTx(contract.updateEMA());
 
 // FALLBACK
 document.getElementById("setFallbackBtn").onclick = () => {
