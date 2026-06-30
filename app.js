@@ -107,43 +107,25 @@ updateStatus("❌ Failed");
 }
 }
 
-document.getElementById("depositBtn").onclick = async () => {
-try {
+// DEPOSIT
+document.getElementById("depositBtn").onclick = () => {
 const v = document.getElementById("depositAmount").value;
+if(!v) return alert("Enter amount");
 
-if (!v || isNaN(v)) {
-alert("Enter TRC amount");
-return;
-}
-
-const amount = ethers.utils.parseUnits(v.toString(), 18);
-
-await handleTx(contract.depositRewardTRC(amount));
-
-} catch (e) {
-console.log(e);
-updateStatus("❌ TRC Deposit Failed");
-}
+handleTx(contract.depositRewardTRC(
+ethers.utils.parseUnits(v,18)
+));
 };
 
-document.getElementById("depositUSDTBtn").onclick = async () => {
-try {
-const v = document.getElementById("depositAmount").value;
+document.getElementById("depositUSDTBtn").onclick = () => {
+const v = document.getElementById("depositUSDTAmount").value;
+if(!v) return alert("Enter amount");
 
-if (!v || isNaN(v)) {
-alert("Enter USDT amount");
-return;
-}
-
-const amount = ethers.utils.parseUnits(v.toString(), 6);
-
-await handleTx(contract.depositRewardUSDT(amount));
-
-} catch (e) {
-console.log(e);
-updateStatus("❌ USDT Deposit Failed");
-}
+handleTx(contract.depositRewardUSDT(
+ethers.utils.parseUnits(v,18)
+));
 };
+
 // WITHDRAW TRC
 document.getElementById("withdrawRewardBtn").onclick = () => {
 const v = document.getElementById("withdrawRewardAmount").value;
