@@ -29,19 +29,18 @@ const abi = [
 "function setPriceSourceToICO()",
 
 "function initializeEMA()",
-"function updateEMA()"
+"function updateEMA()",
+
+"function setFallbackICO(address)",
+"function setPriceSourceToFallback()"
 ];
 
-// STATUS
 function updateStatus(msg){
 document.getElementById("status").innerHTML = msg;
 }
 
 // CONNECT
 document.getElementById("connectBtn").onclick = async () => {
-try{
-if(!window.ethereum) return alert("Install MetaMask");
-
 await window.ethereum.request({ method: "eth_requestAccounts" });
 
 provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -50,28 +49,15 @@ user = await signer.getAddress();
 
 contract = new ethers.Contract(contractAddress, abi, signer);
 
-const owner = await contract.owner();
-
 document.getElementById("wallet").innerText =
-user.slice(0,6) + "..." + user.slice(-4);
-
-updateStatus(user.toLowerCase() === owner.toLowerCase()
-? "✅ Owner"
-: "⚠️ User");
+user.slice(0,6)+"..."+user.slice(-4);
 
 await loadData();
 initChart();
-
-}catch(e){
-console.log(e);
-updateStatus("❌ Error");
-}
 };
 
 // LOAD DATA
 async function loadData(){
-try{
-
 const rTRC = await contract.rewardPoolTRC();
 const rUSDT = await contract.rewardPoolUSDT();
 
@@ -84,8 +70,14 @@ const price = await contract.getTRCPriceUSD();
 document.getElementById("rewardPool").innerText =
 ethers.utils.formatUnits(rTRC,18);
 
+document.getElementById("rewardUSDT").innerText =
+ethers.utils.formatUnits(rUSDT,18);
+
 document.getElementById("taxPool").innerText =
 ethers.utils.formatUnits(tTRC,18);
+
+document.getElementById("taxUSDT").innerText =
+ethers.utils.formatUnits(tUSDT,18);
 
 document.getElementById("contractBalance").innerText =
 ethers.utils.formatUnits(bal,18);
@@ -94,25 +86,16 @@ document.getElementById("trcPrice").innerText =
 ethers.utils.formatUnits(price,18);
 
 updateChart(ethers.utils.formatUnits(bal,18));
-
-}catch(e){
-console.log(e);
-}
 }
 
 // TX HANDLER
-async function handleTx(txPromise){
+async function handleTx(tx){
 try{
 updateStatus("⏳ Processing...");
-const tx = await txPromise;
-
-updateStatus(`TX Sent: ${tx.hash}`);
-
-await tx.wait();
-
-updateStatus("✅ Done");
+const t = await tx;
+await t.wait();
+updateStatus("✅ Success");
 await loadData();
-
 }catch(e){
 console.log(e);
 updateStatus("❌ Failed");
@@ -120,45 +103,59 @@ updateStatus("❌ Failed");
 }
 
 // REWARD
-document.getElementById("depositBtn").onclick = async () => {
-const val = document.getElementById("depositAmount").value;
-handleTx(contract.depositRewardTRC(ethers.utils.parseUnits(val,18)));
+document.getElementById("depositBtn").onclick = () => {
+const v = document.getElementById("depositAmount").value;
+handleTx(contract.depositRewardTRC(ethers.utils.parseUnits(v,18)));
 };
 
-document.getElementById("withdrawRewardBtn").onclick = async () => {
-const val = document.getElementById("withdrawRewardAmount").value;
-handleTx(contract.withdrawRewardPoolTRC(ethers.utils.parseUnits(val,18)));
+document.getElementById("depositUSDTBtn").onclick = () => {
+const v = document.getElementById("depositAmount").value;
+handleTx(contract.depositRewardUSDT(ethers.utils.parseUnits(v,18)));
 };
 
-document.getElementById("withdrawTaxBtn").onclick = async () => {
+document.getElementById("withdrawRewardBtn").onclick = () => {
+const v = document.getElementById("withdrawRewardAmount").value;
+handleTx(contract.withdrawRewardPoolTRC(ethers.utils.parseUnits(v,18)));
+};
+
+document.getElementById("withdrawRewardUSDTBtn").onclick = () => {
+const v = document.getElementById("withdrawRewardAmount").value;
+handleTx(contract.withdrawRewardPoolUSDT(ethers.utils.parseUnits(v,18)));
+};
+
+document.getElementById("withdrawTaxBtn").onclick = () => {
 handleTx(contract.withdrawTaxTRC());
 };
 
+document.getElementById("withdrawTaxUSDTBtn").onclick = () => {
+handleTx(contract.withdrawTaxUSDT());
+};
+
 // PRICE
-document.getElementById("setManualBtn").onclick = async () => {
-const val = document.getElementById("manualPrice").value;
-handleTx(contract.setPriceSourceToManual(ethers.utils.parseUnits(val,18)));
+document.getElementById("setIcoBtn").onclick = () => handleTx(contract.setPriceSourceToICO());
+document.getElementById("setEmaBtn").onclick = () => handleTx(contract.setPriceSourceToEMA());
+
+document.getElementById("setManualBtn").onclick = () => {
+const v = document.getElementById("manualPrice").value;
+handleTx(contract.setPriceSourceToManual(ethers.utils.parseUnits(v,18)));
 };
 
-document.getElementById("setDexBtn").onclick = async () => {
-const val = document.getElementById("dexAddress").value;
-handleTx(contract.setPriceSourceToDex(val));
+document.getElementById("setDexBtn").onclick = () => {
+const v = document.getElementById("dexAddress").value;
+handleTx(contract.setPriceSourceToDex(v));
 };
 
-document.getElementById("setEmaBtn").onclick = async () => {
-handleTx(contract.setPriceSourceToEMA());
+document.getElementById("initEmaBtn").onclick = () => handleTx(contract.initializeEMA());
+document.getElementById("updateEmaBtn").onclick = () => handleTx(contract.updateEMA());
+
+// FALLBACK
+document.getElementById("setFallbackBtn").onclick = () => {
+const v = document.getElementById("fallbackAddress").value;
+handleTx(contract.setFallbackICO(v));
 };
 
-document.getElementById("setIcoBtn").onclick = async () => {
-handleTx(contract.setPriceSourceToICO());
-};
-
-document.getElementById("initEmaBtn").onclick = async () => {
-handleTx(contract.initializeEMA());
-};
-
-document.getElementById("updateEmaBtn").onclick = async () => {
-handleTx(contract.updateEMA());
+document.getElementById("useFallbackBtn").onclick = () => {
+handleTx(contract.setPriceSourceToFallback());
 };
 
 // CHART
@@ -172,17 +169,15 @@ options:{responsive:true,maintainAspectRatio:false}
 });
 }
 
-function updateChart(val){
+function updateChart(v){
 const t = new Date().toLocaleTimeString();
-
 chart.data.labels.push(t);
-chart.data.datasets[0].data.push(val);
+chart.data.datasets[0].data.push(v);
 
-if(chart.data.labels.length > 20){
+if(chart.data.labels.length>20){
 chart.data.labels.shift();
 chart.data.datasets[0].data.shift();
 }
-
 chart.update();
 }
 
