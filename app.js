@@ -136,14 +136,25 @@ ethers.utils.parseUnits(v,18)
 ));
 };
 
-// WITHDRAW USDT
-document.getElementById("withdrawRewardUSDTBtn").onclick = () => {
+document.getElementById("withdrawRewardUSDTBtn").onclick = async () => {
+try {
 const v = document.getElementById("withdrawRewardAmount").value;
-if(!v) return alert("Enter amount");
 
-handleTx(contract.withdrawRewardPoolUSDT(
-ethers.utils.parseUnits(v,18)
-));
+if (!v || isNaN(v)) {
+alert("Enter valid USDT amount");
+return;
+}
+
+// convert safely
+const amount = ethers.utils.parseUnits(v.toString(), 6);
+
+// IMPORTANT: send transaction explicitly
+await handleTx(contract.withdrawRewardPoolUSDT(amount));
+
+} catch (e) {
+console.log(e);
+updateStatus("❌ USDT Withdraw Failed");
+}
 };
 
 // TAX
