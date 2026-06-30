@@ -271,3 +271,111 @@ height:220px;
 }
 
 }
+
+
+
+/* ================================
+   🔥 MOBILE APP UI IMPROVEMENT PATCH
+   (ADD BELOW YOUR EXISTING CSS)
+================================== */
+
+/* Prevent text overflow in all cards */
+.card, .priceCard {
+word-break: break-word;
+overflow-wrap: break-word;
+}
+
+/* Better spacing between sections */
+.section {
+padding-bottom: 20px;
+}
+
+/* Make buttons consistent inside cards */
+.card button,
+.priceCard button {
+width: 100%;
+margin-top: 8px;
+}
+
+/* Fix input + button alignment in mobile feel */
+.inputBox button {
+width: 100%;
+}
+
+/* Improve readability of values */
+.card span {
+line-height: 1.4;
+word-break: break-word;
+}
+
+/* ===== MOBILE FIX (IMPORTANT) ===== */
+@media(max-width:768px){
+
+/* Prevent horizontal squeeze */
+.grid, .priceGrid {
+grid-template-columns: 1fr !important;
+}
+
+/* Card spacing like mobile app tiles */
+.card, .priceCard {
+margin-bottom: 12px;
+}
+
+/* Make buttons full width like app */
+button {
+width: 100%;
+margin-top: 6px;
+}
+
+/* Better menu spacing */
+.menu {
+gap: 8px;
+}
+
+/* Prevent input overflow */
+input {
+font-size: 14px;
+}
+
+/* Improve chart spacing */
+.chartBox {
+padding: 8px;
+}
+
+/* Wallet + status readability */
+#wallet, #status {
+font-size: 12px;
+padding: 0 10px;
+}
+}
+
+/* ===== SMALL PHONE FIX (iPhone SE etc) ===== */
+@media(max-width:480px){
+
+/* tighter container spacing */
+.container {
+padding: 10px;
+}
+
+/* prevent cards from looking too large */
+.card, .priceCard {
+padding: 12px;
+border-radius: 12px;
+}
+
+/* make grid stack perfectly */
+.grid {
+grid-template-columns: 1fr;
+}
+
+/* improve title visibility */
+h1 {
+letter-spacing: 0.5px;
+}
+
+/* fix button tap size (important for mobile UX) */
+button {
+padding: 12px;
+font-size: 14px;
+}
+}
