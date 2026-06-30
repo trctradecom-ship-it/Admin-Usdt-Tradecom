@@ -1,90 +1,273 @@
-body{
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+*{
 margin:0;
-font-family:Arial;
-background:#0a0a0a;
-color:#fff;
+padding:0;
+box-sizing:border-box;
 }
 
+body{
+font-family:'Inter', sans-serif;
+background: radial-gradient(circle at top,#0f0f0f,#050505);
+color:#eaeaea;
+overflow-x:hidden;
+}
+
+/* ===== MAIN ===== */
 .container{
 max-width:1100px;
 margin:auto;
 padding:20px;
 }
 
+/* ===== TITLE ===== */
 h1{
 text-align:center;
-color:#00ffcc;
+font-size:28px;
+color:#00ffd5;
+text-shadow:0 0 15px rgba(0,255,213,0.4);
+margin-bottom:10px;
 }
 
-.btn{
-padding:10px 15px;
-border:none;
-cursor:pointer;
-margin:5px;
-background:#222;
-color:#fff;
-border-radius:8px;
-transition:0.3s;
+/* ===== WALLET ===== */
+#wallet,#status{
+text-align:center;
+font-size:14px;
+opacity:0.8;
+margin-top:5px;
 }
 
-.btn:hover{
-background:#00ffcc;
-color:#000;
-}
-
-.primary{
-background:#00ffcc;
-color:#000;
-}
-
-.danger{
-background:#ff3b3b;
-}
-
+/* ===== MENU ===== */
 .menu{
 display:flex;
 justify-content:center;
-gap:10px;
+gap:12px;
 margin:20px 0;
+flex-wrap:wrap;
 }
 
-.section{display:none;}
-.section.active{display:block;}
+.menu button{
+padding:10px 14px;
+border-radius:12px;
+border:1px solid rgba(255,255,255,0.08);
+background:rgba(255,255,255,0.05);
+color:#fff;
+cursor:pointer;
+transition:0.3s;
+backdrop-filter:blur(10px);
+}
 
+.menu button:hover{
+background:rgba(0,255,213,0.15);
+box-shadow:0 0 15px rgba(0,255,213,0.3);
+transform:translateY(-2px);
+}
+
+/* ===== SECTIONS ===== */
+.section{
+display:none;
+animation:fade 0.4s ease;
+}
+
+.section.active{
+display:block;
+}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(10px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+/* ===== GRID ===== */
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-gap:10px;
+grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+gap:15px;
 }
 
+/* ===== CARD ===== */
 .card{
-background:#111;
-padding:15px;
-border-radius:10px;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(12px);
+border:1px solid rgba(255,255,255,0.08);
+padding:18px;
+border-radius:16px;
 text-align:center;
-border:1px solid #222;
+transition:0.3s;
+box-shadow:0 0 10px rgba(0,0,0,0.4);
 }
 
-.cardBox{
+.card:hover{
+transform:translateY(-5px);
+box-shadow:0 0 25px rgba(0,255,213,0.2);
+border:1px solid rgba(0,255,213,0.3);
+}
+
+.card span{
+display:block;
+margin-top:8px;
+font-size:18px;
+font-weight:600;
+color:#00ffd5;
+text-shadow:0 0 10px rgba(0,255,213,0.3);
+}
+
+/* ===== INPUT BOX ===== */
+.inputBox{
 display:flex;
 flex-direction:column;
 gap:10px;
-max-width:400px;
-margin:auto;
+margin:10px 0;
+}
+
+/* ===== INPUT ===== */
+input{
+width:100%;
+padding:12px;
+border-radius:10px;
+border:none;
+background:rgba(255,255,255,0.06);
+color:#fff;
+outline:none;
+border:1px solid rgba(255,255,255,0.08);
+transition:0.3s;
+}
+
+input:focus{
+border:1px solid #00ffd5;
+box-shadow:0 0 10px rgba(0,255,213,0.3);
+}
+
+/* ===== BUTTON ===== */
+button{
+padding:10px 14px;
+border-radius:10px;
+border:none;
+cursor:pointer;
+color:#fff;
+background:rgba(255,255,255,0.06);
+border:1px solid rgba(255,255,255,0.08);
+transition:0.3s;
+font-weight:500;
+}
+
+button:hover{
+transform:translateY(-2px);
+box-shadow:0 0 20px rgba(0,255,213,0.25);
+border:1px solid rgba(0,255,213,0.4);
+}
+
+/* ===== CHART ===== */
+.chartBox{
+height:320px;
+margin-top:15px;
+background:rgba(255,255,255,0.04);
+border-radius:16px;
+padding:10px;
+border:1px solid rgba(255,255,255,0.08);
+}
+
+/* ===== PRICE GRID ===== */
+.priceGrid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:15px;
+}
+
+.priceCard{
+background:rgba(255,255,255,0.05);
+padding:15px;
+border-radius:14px;
+text-align:center;
+border:1px solid rgba(255,255,255,0.08);
+backdrop-filter:blur(10px);
+transition:0.3s;
+}
+
+.priceCard:hover{
+transform:translateY(-5px);
+border:1px solid rgba(0,255,213,0.3);
+box-shadow:0 0 20px rgba(0,255,213,0.2);
+}
+
+.priceCard h3{
+margin-bottom:10px;
+color:#00ffd5;
+}
+
+/* ===== STATUS ===== */
+#status{
+margin-top:10px;
+font-size:13px;
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media(max-width:768px){
+
+h1{
+font-size:20px;
+}
+
+.menu{
+flex-direction:column;
+}
+
+.menu button{
+width:100%;
+}
+
+.card{
+padding:14px;
+}
+
+.card span{
+font-size:16px;
 }
 
 input{
 padding:10px;
-border-radius:8px;
-border:none;
-background:#1a1a1a;
-color:#fff;
+font-size:14px;
+}
+
+button{
+width:100%;
 }
 
 .chartBox{
-margin-top:20px;
-height:300px;
-background:#111;
-padding:10px;
-border-radius:10px;
+height:250px;
+}
+
+.priceGrid{
+grid-template-columns:1fr;
+}
+
+}
+
+@media(max-width:480px){
+
+.container{
+padding:12px;
+}
+
+h1{
+font-size:18px;
+}
+
+.grid{
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+
+.card{
+padding:12px;
+}
+
+.card span{
+font-size:15px;
+}
+
+.chartBox{
+height:220px;
+}
+
 }
