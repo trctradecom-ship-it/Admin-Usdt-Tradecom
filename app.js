@@ -16,10 +16,9 @@ const abi = [
 
 "function depositRewardTRC(uint256)",
 "function depositRewardUSDT(uint256)",
-
-"function withdrawRewardPoolTRC(uint256)",
-"function withdrawRewardPoolUSDT(uint256)",
-
+  
+"function withdrawRewardPoolTRC(uint256 amount)",
+"function withdrawRewardPoolUSDT(uint256 amount)",
 "function withdrawTaxTRC()",
 "function withdrawTaxUSDT()",
 
@@ -58,36 +57,41 @@ initChart();
 
 // LOAD DATA
 async function loadData(){
-const rTRC = await contract.rewardPoolTRC();
-const rUSDT = await contract.rewardPoolUSDT();
+try{
 
-const tTRC = await contract.taxPoolTRC();
-const tUSDT = await contract.taxPoolUSDT();
+const rewardTRC = await contract.rewardPoolTRC();
+const rewardUSDT = await contract.rewardPoolUSDT();
 
-const bal = await contract.contractTRCBalance();
+const taxTRC = await contract.taxPoolTRC();
+const taxUSDT = await contract.taxPoolUSDT();
+
+const balance = await contract.contractTRCBalance();
 const price = await contract.getTRCPriceUSD();
 
-document.getElementById("rewardPool").innerText =
-ethers.utils.formatUnits(rTRC,18);
+document.getElementById("rewardPool").innerHTML =
+`
+TRC: ${ethers.utils.formatUnits(rewardTRC,18)} <br>
+USDT: ${ethers.utils.formatUnits(rewardUSDT,18)}
+`;
 
-document.getElementById("rewardUSDT").innerText =
-ethers.utils.formatUnits(rUSDT,18);
-
-document.getElementById("taxPool").innerText =
-ethers.utils.formatUnits(tTRC,18);
-
-document.getElementById("taxUSDT").innerText =
-ethers.utils.formatUnits(tUSDT,18);
+document.getElementById("taxPool").innerHTML =
+`
+TRC: ${ethers.utils.formatUnits(taxTRC,18)} <br>
+USDT: ${ethers.utils.formatUnits(taxUSDT,18)}
+`;
 
 document.getElementById("contractBalance").innerText =
-ethers.utils.formatUnits(bal,18);
+ethers.utils.formatUnits(balance,18);
 
 document.getElementById("trcPrice").innerText =
 ethers.utils.formatUnits(price,18);
 
-updateChart(ethers.utils.formatUnits(bal,18));
-}
+updateChart(ethers.utils.formatUnits(balance,18));
 
+}catch(e){
+console.log(e);
+}
+}
 // TX HANDLER
 async function handleTx(tx){
 try{
@@ -118,9 +122,13 @@ const v = document.getElementById("withdrawRewardAmount").value;
 handleTx(contract.withdrawRewardPoolTRC(ethers.utils.parseUnits(v,18)));
 };
 
-document.getElementById("withdrawRewardUSDTBtn").onclick = () => {
-const v = document.getElementById("withdrawRewardAmount").value;
-handleTx(contract.withdrawRewardPoolUSDT(ethers.utils.parseUnits(v,18)));
+document.getElementById("withdrawRewardBtn").onclick = async () => {
+    const amount = document.getElementById("withdrawRewardAmount").value;
+    if(!amount) return alert("Enter amount");
+
+    const parsed = ethers.utils.parseUnits(amount, 18);
+
+    handleTx(contract.withdrawRewardPoolUSDT(parsed));
 };
 
 document.getElementById("withdrawTaxBtn").onclick = () => {
