@@ -1,8 +1,9 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Rewards USDT Admin Panel</title>
 
 <link rel="stylesheet" href="style.css">
@@ -36,10 +37,10 @@
 
 <div class="card">TRC Balance <span id="contractBalance">0</span></div>
 
-<div class="card">Reward TRC <span id="rewardPool">0</span></div>
+<div class="card">Reward TRC <span id="rewardTRC">0</span></div>
 <div class="card">Reward USDT <span id="rewardUSDT">0</span></div>
 
-<div class="card">Tax TRC <span id="taxPool">0</span></div>
+<div class="card">Tax TRC <span id="taxTRC">0</span></div>
 <div class="card">Tax USDT <span id="taxUSDT">0</span></div>
 
 <div class="card">TRC Price <span id="trcPrice">0</span></div>
@@ -58,13 +59,17 @@
 <div class="box">
 
 <h3>💰 Deposit</h3>
+
 <input id="depositAmount" placeholder="TRC Amount">
 <button id="depositBtn" class="btn">Deposit TRC</button>
+
+<input id="depositUSDTAmount" placeholder="USDT Amount">
 <button id="depositUSDTBtn" class="btn">Deposit USDT</button>
 
 <hr>
 
 <h3>💸 Withdraw Rewards</h3>
+
 <input id="withdrawRewardAmount" placeholder="Amount">
 
 <button id="withdrawRewardBtn" class="btn">Withdraw TRC</button>
@@ -73,6 +78,7 @@
 <hr>
 
 <h3>🧾 Tax Withdraw</h3>
+
 <button id="withdrawTaxBtn" class="btn danger">TRC Tax</button>
 <button id="withdrawTaxUSDTBtn" class="btn danger">USDT Tax</button>
 
