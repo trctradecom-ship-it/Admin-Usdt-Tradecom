@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Rewards Panel</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🔥 Rewards usdt Admin Panel</h1>
+
+<button id="connectBtn" class="btn primary">Connect Wallet</button>
+
+<p id="wallet">Not Connected</p>
+<p id="status"></p>
+
+<!-- MENU -->
+<div class="menu">
+<button onclick="showSection('info')">📊 Info</button>
+<button onclick="showSection('reward')">💰 Rewards</button>
+<button onclick="showSection('price')">⚙️ Price</button>
+</div>
+
+<!-- INFO -->
+<div id="info" class="section active">
+
+<div class="grid">
+
+<div class="card">TRC Balance <span id="contractBalance">0</span></div>
+<div class="card">Reward Pool <span id="rewardPool">0</span></div>
+<div class="card">Tax Pool <span id="taxPool">0</span></div>
+<div class="card">TRC Price <span id="trcPrice">0</span></div>
+
+</div>
+
+<div class="chartBox">
+<canvas id="chart"></canvas>
+</div>
+
+</div>
+
+<!-- REWARD -->
+<div id="reward" class="section">
+
+<div class="cardBox">
+
+<input id="depositAmount" placeholder="Deposit TRC">
+<button id="depositBtn" class="btn">Deposit Reward</button>
+
+<input id="withdrawRewardAmount" placeholder="Withdraw Reward">
+<button id="withdrawRewardBtn" class="btn">Withdraw Reward</button>
+
+<button id="withdrawTaxBtn" class="btn danger">Withdraw Tax</button>
+
+</div>
+
+</div>
+
+<!-- PRICE -->
+<div id="price" class="section">
+
+<div class="cardBox">
+
+<button id="setIcoBtn" class="btn">ICO</button>
+<button id="setEmaBtn" class="btn">EMA</button>
+
+<input id="manualPrice" placeholder="Manual Price">
+<button id="setManualBtn" class="btn">Set Manual</button>
+
+<input id="dexAddress" placeholder="DEX Pair">
+<button id="setDexBtn" class="btn">Set DEX</button>
+
+<button id="initEmaBtn" class="btn">Init EMA</button>
+<button id="updateEmaBtn" class="btn">Update EMA</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+function showSection(id){
+    document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+}
+</script>
+
+<script src="app.js"></script>
+
+</body>
+</html>
